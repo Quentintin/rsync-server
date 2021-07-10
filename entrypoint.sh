@@ -6,6 +6,7 @@ PASSWORD=${PASSWORD:-pass}
 ALLOW=${ALLOW:-192.168.8.0/24 192.168.24.0/24 172.16.0.0/12 127.0.0.1/32}
 VOLUME=${VOLUME:-/data}
 
+rm /var/run/rsync.pid
 
 setup_sshd(){
 	if [ -e "/root/.ssh/authorized_keys" ]; then
