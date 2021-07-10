@@ -6,19 +6,7 @@ PASSWORD=${PASSWORD:-pass}
 ALLOW=${ALLOW:-192.168.8.0/24 192.168.24.0/24 172.16.0.0/12 127.0.0.1/32}
 VOLUME=${VOLUME:-/data}
 
-# Check the file is exists or not
-if [ -f /var/run/rsync.pid ]; then
-   # Remove  the file with permission
-   rm /var/run/rsync.pid
-   # Check the file is removed or not
-   if [ -f /var/run/rsync.pid]; then
-      echo "/var/run/rsync.pid is not removed"
-   else
-      echo "/var/run/rsync.pid is removed"
-   fi
-else
-   echo "File does not exist"
-fi
+
 
 setup_sshd(){
 	if [ -e "/root/.ssh/authorized_keys" ]; then
@@ -61,6 +49,21 @@ if [ "$1" = 'rsync_server' ]; then
     exec /usr/sbin/sshd &
     mkdir -p $VOLUME
     setup_rsyncd
+    
+    # Check the file is exists or not
+	if [ -f /var/run/rsync.pid ]; then
+	   # Remove  the file with permission
+	   rm /var/run/rsync.pid
+	   # Check the file is removed or not
+	   if [ -f /var/run/rsync.pid]; then
+	      echo "/var/run/rsync.pid is not removed"
+	   else
+	      echo "/var/run/rsync.pid is removed"
+	   fi
+	else
+	   echo "File does not exist"
+	fi
+    
     exec /usr/bin/rsync --no-detach --daemon --config /etc/rsyncd.conf "$@"
 else
 	setup_sshd
