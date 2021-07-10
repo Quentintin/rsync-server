@@ -24,7 +24,7 @@ setup_rsyncd(){
 	echo "$USERNAME:$PASSWORD" > /etc/rsyncd.secrets
     chmod 0400 /etc/rsyncd.secrets
 	[ -f /etc/rsyncd.conf ] || cat > /etc/rsyncd.conf <<EOF
-pid file = /var/run/rsyncd.pid
+#pid file = /var/run/rsyncd.pid
 log file = /dev/stdout
 timeout = 300
 max connections = 10
@@ -50,21 +50,7 @@ if [ "$1" = 'rsync_server' ]; then
     mkdir -p $VOLUME
     setup_rsyncd
     
-    # Check the file is exists or not
-	if [ -f /var/run/rsync.pid ]; then
-	   # Remove  the file with permission
-	   rm /var/run/rsync.pid
-	   # Check the file is removed or not
-	   if [ -f /var/run/rsync.pid]; then
-	      echo "/var/run/rsync.pid is not removed"
-	   else
-	      echo "/var/run/rsync.pid is removed"
-	   fi
-	else
-	   echo "File does not exist"
-	fi
-    
-    exec /usr/bin/rsync --no-detach --daemon --config /etc/rsyncd.conf "$@"
+    exec /usr/bin/rsync --no-detach --daemon --config /etc/rsyncd.conf "$@"    
 else
 	setup_sshd
 	exec /usr/sbin/sshd &
