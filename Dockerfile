@@ -7,7 +7,7 @@ ENV NOTVISIBLE "in users profile"
 RUN apt-get update && \
 	apt-get install -y openssh-server rsync && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/run/rsync.pid
 
 RUN mkdir /var/run/sshd
 RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
